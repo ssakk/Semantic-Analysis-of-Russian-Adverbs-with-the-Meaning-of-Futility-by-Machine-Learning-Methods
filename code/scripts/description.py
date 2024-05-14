@@ -41,9 +41,9 @@ class Word:
 
 
 class Sentence:
-    def __init__(self, sentence: List[List[str]]):
+    def __init__(self, position: int, sentence: List[List[str]]):
         self.tokens = sentence
-        self.words = [Word(token) for token in self.tokens]
+        self.adverb = Word(self.tokens[position])
 
     def __str__(self):
         res = []
@@ -54,8 +54,8 @@ class Sentence:
     def get_position(self) -> int:
         pass
 
-    def get_annotation(self, number: int) -> List:
-        if number == 1:
-            return [self.get_position()]
-        else:
-            pass
+    def get_verb_embedding(self) -> int:
+        pass
+
+    def get_subject_embedding(self) -> int:
+        pass
