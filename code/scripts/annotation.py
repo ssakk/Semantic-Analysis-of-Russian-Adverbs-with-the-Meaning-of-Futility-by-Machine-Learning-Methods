@@ -1,6 +1,9 @@
-from description import Word, Sentence
-from typing import List, Dict, Any
+from sentence import Sentence
+from typing import List, Dict, Any, Optional
 import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 class Corpus:
@@ -13,32 +16,54 @@ class Corpus:
         with open(self.path, 'r', encoding='utf-8') as f:
             content = f.read()
             sentences = content.split('\n\n\n')
-            corpus = {'target_word': [], 'text': [], 'sentence': []}
-            for s in sentences:
+            corpus = {'target_word': [], 'sentence': []}
+            for num, s in enumerate(sentences):
                 tokens = [token.split('\t') for token in s.split('\n')]
                 for i, token in enumerate(tokens):
                     for adverb in self.adverbs:
                         if token[2] == adverb:
                             corpus['target_word'].append(adverb)
                             sentence = Sentence(i, tokens)
-                            corpus['text'].append(str(sentence))
                             corpus['sentence'].append(sentence)
         return corpus
 
-    def annotation(self, verb_embedding: bool = False, subject_embedding: bool = False,
+    def annotation(self, subject_embedding: bool = False, animacy: bool = False, verb_embedding: bool = False,
+                   person: bool = False, tense: bool = False, aspect: bool = False,
                    position: bool = False) -> pd.DataFrame:
         corpus_copy = self.corpus.copy(deep=True)
-        if verb_embedding:
-            corpus_copy['verb_embedding'] = corpus_copy['sentence'].apply(lambda x: x.get_verb_embedding())
+        corpus_copy['target'] = corpus_copy['target_word'].apply(lambda x: self.hash(x))
         if subject_embedding:
             corpus_copy['subject_embedding'] = corpus_copy['sentence'].apply(lambda x: x.get_subject_embedding())
+        if animacy:
+            corpus_copy['animacy'] = corpus_copy['sentence'].apply(lambda x: x.get_animacy())
+        if verb_embedding:
+            corpus_copy['verb_embedding'] = corpus_copy['sentence'].apply(lambda x: x.get_verb_embedding())
+        if person:
+            corpus_copy['person'] = corpus_copy['sentence'].apply(lambda x: x.get_person())
+        if tense:
+            corpus_copy['tense'] = corpus_copy['sentence'].apply(lambda x: x.get_tense())
+        if aspect:
+            corpus_copy['aspect'] = corpus_copy['sentence'].apply(lambda x: x.get_aspect())
         if position:
-            corpus_copy['subject_embedding'] = corpus_copy['sentence'].apply(lambda x: x.get_position())
-
+            corpus_copy['position'] = corpus_copy['sentence'].apply(lambda x: x.get_position())
         return corpus_copy
 
+    @staticmethod
+    def hash(word: str) -> Optional[int]:
+        """
+        Converts adverb to an integer representation using a given dictionary of hashes.
 
-first = Corpus('бесполезно', 'D:/subcorpus_1.txt')
-example_corpus = first.corpus
-# y = Word('беспокоили	Vmis-p-a-e	беспокоить	V	29	26	подч-союзн')
-print(example_corpus)
+        Args:
+            word: The adverb value.
+
+        Returns:
+            The integer representation of the word.
+        """
+        hash_table = {
+            'напрасно': 0, 'зря': 1, 'тщетно': 2, 'безуспешно': 3, 'безрезультатно': 4, 'бесполезно': 5, 'впустую': 6,
+            'понапрасну': 7, 'попусту': 8, 'всуе': 9, 'впусте': 10, 'вхолостую': 11, 'бездельно': 12, 'даром': 13
+        }
+        if word in hash_table:
+            return hash_table[word]
+        else:
+            raise ValueError('является ли слово таргетом?')

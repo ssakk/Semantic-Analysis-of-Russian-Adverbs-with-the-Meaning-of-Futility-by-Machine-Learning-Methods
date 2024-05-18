@@ -1,19 +1,19 @@
-from gensim.models import FastText
+from gensim.models import KeyedVectors
 import wget
 import zipfile
 import os
 
 
 class Model(object):
-    model_url = 'http://vectors.nlpl.eu/repository/20/181.zip'
+    model_url = 'http://vectors.nlpl.eu/repository/20/213.zip'
 
     def download(self):
         wget.download(self.model_url)
 
     def __init__(self):
-        if not os.path.exists("181.zip"):
-            self.download()
         if not os.path.exists("model/model.model"):
-            z = zipfile.ZipFile('181.zip', 'r')
+            if not os.path.exists("213.zip"):
+                self.download()
+            z = zipfile.ZipFile('213.zip', 'r')
             z.extractall("model")
-        self.model = FastText.load("model/model.model")
+        self.model = KeyedVectors.load("model/model.model")
