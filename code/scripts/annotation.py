@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-class Corpus:
+class AnnotatedCorpus:
     def __init__(self, adverbs: str, corpus_path: str):
         self.adverbs = adverbs.split(', ')
         self.path = corpus_path
