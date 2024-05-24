@@ -1,9 +1,8 @@
-from sentence import Sentence
 from typing import List, Dict, Any, Optional
-import pandas as pd
-import logging
 
-logging.basicConfig(level=logging.INFO)
+import pandas as pd
+
+from sentence import Sentence
 
 
 class AnnotatedCorpus:
@@ -17,7 +16,7 @@ class AnnotatedCorpus:
             content = f.read()
             sentences = content.split('\n\n\n')
             corpus = {'target_word': [], 'sentence': []}
-            for num, s in enumerate(sentences):
+            for s in sentences:
                 tokens = [token.split('\t') for token in s.split('\n')]
                 for i, token in enumerate(tokens):
                     for adverb in self.adverbs:
@@ -27,17 +26,17 @@ class AnnotatedCorpus:
                             corpus['sentence'].append(sentence)
         return corpus
 
-    def annotation(self, subject_embedding: bool = False, animacy: bool = False, verb_embedding: bool = False,
+    def annotation(self, subject_class: bool = False, animacy: bool = False, verb_class: bool = False,
                    person: bool = False, tense: bool = False, aspect: bool = False,
                    position: bool = False) -> pd.DataFrame:
         corpus_copy = self.corpus.copy(deep=True)
         corpus_copy['target'] = corpus_copy['target_word'].apply(lambda x: self.hash(x))
-        if subject_embedding:
-            corpus_copy['subject_embedding'] = corpus_copy['sentence'].apply(lambda x: x.get_subject_embedding())
+        if subject_class:
+            corpus_copy['subject_class'] = corpus_copy['sentence'].apply(lambda x: x.get_subject_class())
         if animacy:
             corpus_copy['animacy'] = corpus_copy['sentence'].apply(lambda x: x.get_animacy())
-        if verb_embedding:
-            corpus_copy['verb_embedding'] = corpus_copy['sentence'].apply(lambda x: x.get_verb_embedding())
+        if verb_class:
+            corpus_copy['verb_class'] = corpus_copy['sentence'].apply(lambda x: x.get_verb_class())
         if person:
             corpus_copy['person'] = corpus_copy['sentence'].apply(lambda x: x.get_person())
         if tense:

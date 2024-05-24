@@ -7,9 +7,7 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
-classifier = RandomForestClassifier(n_estimators=100)
-
-from annotation import AnnotatedCorpus
+from code.scripts.annotation import AnnotatedCorpus
 
 
 class Experiment:

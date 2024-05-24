@@ -1,7 +1,8 @@
-from gensim.models import KeyedVectors
-import wget
 import zipfile
 import os
+
+from gensim.models import KeyedVectors
+import wget
 
 
 class Model(object):
@@ -11,7 +12,7 @@ class Model(object):
         wget.download(self.model_url)
 
     def __init__(self):
-        if not os.path.exists("model/model.model"):
+        if not os.path.exists("../word_classes/model/model.model"):
             if not os.path.exists("213.zip"):
                 self.download()
             z = zipfile.ZipFile('213.zip', 'r')

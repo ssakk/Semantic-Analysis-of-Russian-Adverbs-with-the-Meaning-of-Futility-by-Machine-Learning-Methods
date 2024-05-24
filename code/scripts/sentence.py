@@ -1,10 +1,8 @@
 from typing import List, Optional
 
-import numpy as np
-
-from word import Word
-from model import Model
-model = Model().model
+from code.scripts.word import Word
+subject_classes = {}
+verb_classes = {}
 
 
 class Sentence:
@@ -31,7 +29,7 @@ class Sentence:
         subjects = []
         for token in self.tokens:
             word = Word(token)
-            if word.y == self.verb.x and word.sint == 'предик' and (word.pos == 'N' or word.pos == 'P'):
+            if self.verb and word.y == self.verb.x and word.sint == 'предик' and (word.pos == 'N' or word.pos == 'P'):
                 if word.case() == 'n':
                     subjects.append(word)
         if len(subjects) == 0:
@@ -65,9 +63,9 @@ class Sentence:
 
         return closest_word
 
-    def get_subject_embedding(self) -> Optional[np.ndarray]:
+    def get_subject_class(self) -> Optional[int]:
         if self.subject:
-            return self.subject.embedding(model)
+            return self.subject.word_class(subject_classes)
         else:
             return None
 
@@ -82,9 +80,9 @@ class Sentence:
         else:
             return None
 
-    def get_verb_embedding(self) -> Optional[np.ndarray]:
+    def get_verb_class(self) -> Optional[int]:
         if self.verb:
-            return self.verb.embedding(model)
+            return self.verb.word_class(verb_classes)
         else:
             return None
 

@@ -1,27 +1,23 @@
-from typing import List, Optional
-
-import gensim
-import numpy as np
+from typing import List, Optional, Dict
 
 
 class Word:
     """
     Class for parsing RuWAC token
     """
+
     def __init__(self, word: List[str]):
         self.word = word
         self.token, self.morphs, self.lemma, self.pos, self.x, self.y, self.sint = self.word
 
     def __str__(self):
-        return ' '.join(self.word)
+        return self.lemma
 
-    def embedding(self, vector_model: gensim.models.fasttext.FastTextKeyedVectors) -> np.ndarray:
-        if self.lemma in vector_model:
-            embedding = vector_model[self.lemma]
+    def word_class(self, word_classes: Dict[str, int]) -> int:
+        if self.lemma in word_classes:
+            return word_classes[self.lemma]
         else:
-            embedding = np.ndarray(0)
-            print(f'Слова {self.lemma} нет в модели')
-        return embedding
+            raise ValueError('у слова нет класса')
 
     def animacy(self) -> Optional[str]:
         if self.pos == 'N':
