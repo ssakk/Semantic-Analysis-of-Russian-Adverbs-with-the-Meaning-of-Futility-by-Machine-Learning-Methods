@@ -1,8 +1,13 @@
 from typing import List, Optional
+import json
 
 from code.scripts.word import Word
-subject_classes = {}
-verb_classes = {}
+
+with open('../word_classes/subjects_classes.json', encoding='utf-8') as f1:
+    subject_classes = json.load(f1)
+
+with open('../word_classes/verbs_classes.json', encoding='utf-8') as f2:
+    verb_classes = json.load(f2)
 
 
 class Sentence:
@@ -65,24 +70,42 @@ class Sentence:
 
     def get_subject_class(self) -> Optional[int]:
         if self.subject:
-            return self.subject.word_class(subject_classes)
+            return int(self.subject.word_class(subject_classes))
         else:
             return None
 
     def get_animacy(self) -> Optional[int]:
         if self.subject:
             if self.subject.animacy() == 'n':
-                return 0
+                return 1
             elif self.subject.animacy() == 'y':
+                return 2
+            else:
+                return 0
+        else:
+            return None
+
+    def get_subject_pos(self) -> Optional[int]:
+        if self.subject:
+            if self.subject.pos == 'N':
+                return 0
+            else:
+                return 1
+        else:
+            return None
+
+    def get_verb_negation(self) -> Optional[int]:
+        if self.verb:
+            if self.verb.negation(tokens=self.tokens):
                 return 1
             else:
-                return None
+                return 0
         else:
             return None
 
     def get_verb_class(self) -> Optional[int]:
         if self.verb:
-            return self.verb.word_class(verb_classes)
+            return int(self.verb.word_class(verb_classes))
         else:
             return None
 
@@ -121,11 +144,31 @@ class Sentence:
         else:
             return None
 
-    def get_position(self) -> Optional[int]:
-        if self.verb:
-            if self.adverb.x > self.verb.x:
-                return 0
-            else:
+    def get_adverb_negation(self) -> Optional[int]:
+        if self.adverb:
+            if self.adverb.negation(tokens=self.tokens):
                 return 1
+            else:
+                return 0
+        else:
+            return None
+
+    def get_position(self) -> Optional[int]:
+        if self.verb and self.subject:
+            if self.subject.x > self.verb.x:
+                if self.verb.x > self.adverb.x:
+                    return 0
+                elif self.adverb.x > self.subject.x:
+                    return 2
+                else:
+                    return 1
+            else:
+                if self.subject.x > self.adverb.x:
+                    return 3
+                elif self.adverb.x > self.verb.x:
+                    return 4
+                else:
+                    return 5
+
         else:
             return None

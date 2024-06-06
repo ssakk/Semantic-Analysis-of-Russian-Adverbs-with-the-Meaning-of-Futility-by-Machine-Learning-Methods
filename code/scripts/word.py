@@ -19,6 +19,14 @@ class Word:
         else:
             raise ValueError('у слова нет класса')
 
+    def negation(self, tokens) -> bool:
+        for token in tokens:
+            possible_neg = Word(token)
+            if self.x == possible_neg.y and possible_neg.lemma in ['не', 'ни', 'нет']:
+                return True
+
+        return False
+
     def animacy(self) -> Optional[str]:
         if self.pos == 'N':
             return self.morphs[5]
