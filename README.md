@@ -23,7 +23,7 @@ This study explores the semantics and contextual usage of adverbs with the meani
 | darom                    | 19489                               | 5522                                                     | 28.3                                                                |
 
 ## Annotation
-The annotation process was fully automated, with the main annotation code implemented in the script [annotation.py](). The final list of annotation parameters for sentences in the corpus is as follows:
+The annotation process was fully automated, with the main annotation code implemented in the script [annotation.py](https://github.com/ssakk/Semantic-Analysis-of-Russian-Adverbs-with-the-Meaning-of-Futility-by-Machine-Learning-Methods/blob/main/code/scripts/annotation.py). The final list of annotation parameters for sentences in the corpus is as follows:
 
 - Target Adverb
 - Presence of Negation with the Adverb
