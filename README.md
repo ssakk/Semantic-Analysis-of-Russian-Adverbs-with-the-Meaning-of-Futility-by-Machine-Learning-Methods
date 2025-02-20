@@ -40,10 +40,20 @@ The annotation process was fully automated, with the main annotation code implem
 ## Experiments
 This section presents the results of five experiments assessing the importance of features when training the Random Forest Classifier (RFC) model on various groups of adverbs.
 ### Experiment 1
+The first experiment was conducted on all adverbs.
+![Experiment1](plots/plot1.png)
 ### Experiment 2
+The second one was running on *zrya*, *naprasno*, and *tshchetno*.
+![Experiment2](plots/plot2.png)
 ### Experiment 3
+The third experiment was conducted on the adverbs *tshchetno*, *bezuspeshno*, *bezrezul'tatno*, and *bespolezno*.
+![Experiment3](plots/plot3.png)
 ### Experiment 4
+The fourth experiment was conducted separately on the adverbs *tshchetno* and *bespolezno* within balanced classes to test the hypothesis of retrospective temporal opposition of these adverbs in the literature on the topic.
+![Experiment4](plots/plot4.png)
 ### Experiment 5
+In the final experiment, the adverbs vputyu, ponaprasnu, popustu, and darom will be examined.
+![Experiment5](plots/plot5.png)
 
 ## Results
 - The most important contextual property for adverb selection is the semantic class of the controlling verb.
