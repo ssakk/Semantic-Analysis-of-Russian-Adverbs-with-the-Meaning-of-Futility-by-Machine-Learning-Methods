@@ -1,6 +1,5 @@
 from typing import List, Dict, Tuple
 import csv
-
 from code.scripts.sentence import Sentence
 
 all_adverbs = 'напрасно, зря, тщетно, безуспешно, безрезультатно, бесполезно, впустую, понапрасну, попусту, ' \
@@ -9,41 +8,40 @@ all_adverbs = 'напрасно, зря, тщетно, безуспешно, б�
 
 class Subcorpus:
     def __init__(self, adverbs: str, corpus_path: str):
-        self.adverbs = adverbs.split(', ')
+        self.adverbs = set(adverbs.split(', '))
         self.path = corpus_path
         self.sentences = self.read()
 
     def read(self) -> List[str]:
-        with open(self.path, 'r', encoding='utf-8') as file:
-            content = file.read()
-            sentences = content.split('\n\n\n')
-        return sentences
+        try:
+            with open(self.path, 'r', encoding='utf-8') as file:
+                content = file.read()
+                return content.split('\n\n\n')
+        except FileNotFoundError:
+            print(f"Error: The file {self.path} was not found.")
+            return []
 
     def count_stats(self, name1: str = 'freq_stats.txt', name2: str = 'predic_stats.txt', write: bool = True) -> \
             Tuple[Dict[str, int], Dict[str, int]]:
-        freq_stats = {}
-        predic_stats = {}
-        for adverb in self.adverbs:
-            freq_stats[adverb] = 0
-            predic_stats[adverb] = 0
+        freq_stats = {adverb: 0 for adverb in self.adverbs}
+        predic_stats = {adverb: 0 for adverb in self.adverbs}
 
         for s in self.sentences:
             tokens = [token.split('\t') for token in s.split('\n')]
             for token in tokens:
-                for adverb in self.adverbs:
-                    if token[2] == adverb:
-                        freq_stats[adverb] += 1
-                        if token[6] != 'обст':
-                            predic_stats[adverb] += 1
+                if token[2] in self.adverbs:
+                    freq_stats[token[2]] += 1
+                    if token[6] != 'обст':
+                        predic_stats[token[2]] += 1
 
         if write:
             with open(name1, 'a', encoding='utf-8') as file1:
-                for k in freq_stats:
-                    file1.write(k + '\t' + str(freq_stats[k]) + '\n')
+                for k, v in freq_stats.items():
+                    file1.write(f"{k}\t{v}\n")
 
             with open(name2, 'a', encoding='utf-8') as file2:
-                for k in predic_stats:
-                    file2.write(k + '\t' + str(predic_stats[k]) + '\n')
+                for k, v in predic_stats.items():
+                    file2.write(f"{k}\t{v}\n")
 
         return freq_stats, predic_stats
 
@@ -55,17 +53,14 @@ class Subcorpus:
         for s in self.sentences:
             tokens = [token.split('\t') for token in s.split('\n')]
             for i, token in enumerate(tokens):
-                for adverb in self.adverbs:
-                    if token[2] == adverb:
-                        sentence = Sentence(i, tokens)
-                        verb = str(sentence.get_verb())
-                        if verb:
-                            if verb not in verbs:
-                                verbs.append(verb)
-                        subject = str(sentence.get_subject())
-                        if subject:
-                            if subject not in subjects:
-                                subjects.append(subject)
+                if token[2] in self.adverbs:
+                    sentence = Sentence(i, tokens)
+                    verb = str(sentence.get_verb())
+                    if verb and verb not in verbs:
+                        verbs.append(verb)
+                    subject = str(sentence.get_subject())
+                    if subject and subject not in subjects:
+                        subjects.append(subject)
 
         if write:
             with open(name1, 'a', encoding='utf-8') as file1:
