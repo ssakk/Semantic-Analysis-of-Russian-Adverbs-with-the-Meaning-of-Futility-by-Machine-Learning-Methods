@@ -17,14 +17,22 @@ This study explores the semantics and contextual usage of adverbs with the meani
 | tshchetno                | 8240                                | 2634                                                     | 32.0                                                                |
 | bezuspesno               | 9201                                | 3728                                                     | 40.5                                                                |
 | bezrezul'tatno          | 4519                                | 2711                                                     | 60.0                                                                |
-| bespolezno               | 20277                               | 15408                                                    | 76.0                                                                |
 | vpustuyu                 | 5770                                | 1016                                                     | 17.6                                                                |
 | ponaprasnu               | 2114                                | 354                                                      | 16.7                                                                |
 | popustu                  | 2491                                | 370                                                      | 14.9                                                                |
-| vsuye                    | 808                                 | 689                                                      | 85.3                                                                |
-| vtune                    | 0                                   | 0                                                        | 0                                                                   |
-| vpuste                   | 2                                   | 2                                                        | 100                                                                 |
-| vholostuyu               | 808                                 | 197                                                      | 24.4                                                                |
-| bezdel'no                | 34                                  | 7                                                        | 20.6                                                                |
 | darom                    | 19489                               | 5522                                                     | 28.3                                                                |
 
+## Annotation
+The annotation process was fully automated, with the main annotation code implemented in the script [annotation.py](). The final list of annotation parameters for sentences in the corpus is as follows:
+
+- Target Adverb
+- Presence of Negation with the Adverb
+- Subject Class made up from a distributional semantic embedding from a pretrained language model
+- Subject Animacy
+- Subject Part of Speech
+- Presence of Negation with the Verb
+- Verb Class made up from a distributional semantic embedding from a pretrained language model
+- Verb Person
+- Verb Tense
+- Verb Aspect
+- Word Order of Adverb, Verb, and Subject
