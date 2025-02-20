@@ -36,3 +36,17 @@ The annotation process was fully automated, with the main annotation code implem
 - Verb Tense
 - Verb Aspect
 - Word Order of Adverb, Verb, and Subject
+
+## Experiments
+This section presents the results of five experiments assessing the importance of features when training the Random Forest Classifier (RFC) model on various groups of adverbs.
+### Experiment 1
+### Experiment 2
+### Experiment 3
+### Experiment 4
+### Experiment 5
+
+## Results
+- The most important contextual property for adverb selection is the semantic class of the controlling verb.
+- Other significant parameters for different adverb groups include noun class, word order in the sentence, and the presence of negation with the adverb.
+- All other selected features have a considerably lesser impact on synonym selection.
+- Factors such as person, tense, and aspect of the controlling verb, previously deemed relevant in literature based on manual context selection and non-computer analysis, did not prove significant in this study.
